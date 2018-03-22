@@ -1,42 +1,61 @@
 var gulp = require('gulp'),
+    browserSync = require('browser-sync').create();
+    browserify = require('browserify'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    eslint = require('gulp-eslint');
 
-// Copy index.html from the app to assets
-gulp.task('copy', function() {
-  gulp.src('app/index.html')
-      .pipe(gulp.dest('assets'))
-      .on('error', gutil.log)
+// Static server and watching scss + html files
+gulp.task('start', ['sass','html'], () => {
 
-  gutil.log(gutil.colors.green('HTML copied successfuly!'));
+  browserSync.init({
+    server: "./app"
+  });
+
+  gulp.watch("app/**/*.js", ['js'])
+      .on('change', browserSync.reload);
+  gulp.watch("app/styles/*.scss", ['sass'])
+      .on('change', browserSync.reload);
+  gulp.watch("app/*.html", ['html'])
+      .on('change', browserSync.reload);
+
+  gutil.log(gutil.colors.green('Server started!'));
 });
 
-// SCSS process
-gulp.task('sass', function() {
-  gulp.src('app/styles/main.scss')
-      .pipe(sass({style: 'expanded'}))
-      .on('error', gutil.log)
-      .pipe(gulp.dest('assets'))
-
-  gutil.log(gutil.colors.green('CSS copied successfuly!'));
-});
-
-gulp.task('js', function() {
-  gulp.src('app/scripts/*.js')
+gulp.task('js', () => {
+  gulp.src('app/**/*.js')
+      .pipe(browserify())
       .pipe(uglify())
       .pipe(concat('script.js'))
-      .pipe(gulp.dest('assets'))
+      .pipe(gulp.dest('dist/scripts'));
 
-  gutil.log(gutil.colors.green('JS copied successfuly!'));
+  gutil.log(gutil.colors.green('JS compiled successfuly!'));
 });
 
-gulp.task('watch', function() {
-  gulp.watch('app/*.html', ['copy']);
-  gulp.watch('app/**/*.scss', ['sass']);
-  gulp.watch('app/**/*.js', ['js']);
-})
+gulp.task('lint', () => {
+  gulp.src(['**/*.js', '!node_modules/**'])
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
+});
+
+gulp.task('sass', () => {
+  gulp.src('app/styles/*.scss')
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.dest('dist/css/'))
+
+  gutil.log(gutil.colors.green('CSS compiled successfuly!'));
+});
+
+gulp.task('html', function() {
+  gulp.src('app/index.html')
+      .pipe(gulp.dest('dist'))
+      .on('error', gutil.log);
+
+  gutil.log(gutil.colors.green('HTML compiled successfuly!'));
+});
 
 // Manually run all tasks
 // gulp.task('default', ['copy','sass','js']);

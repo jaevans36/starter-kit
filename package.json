@@ -11,10 +11,12 @@
   "devDependencies": {
     "browser-sync": "latest",
     "gulp": "latest",
-    "gulp-util": "latest",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "latest",
+    "gulp-connect": "latest",
+    "gulp-eslint": "latest",
     "gulp-sass": "latest",
     "gulp-uglify": "latest",
-    "gulp-concat": "latest",
-    "gulp-connect": "latest"
+    "gulp-util": "latest"
   }
 }
