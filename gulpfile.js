@@ -1,11 +1,12 @@
-var gulp = require('gulp'),
-    browserSync = require('browser-sync').create(),
-    gutil = require('gulp-util'),
-    sass = require('gulp-sass'),
-    uglify = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    eslint = require('gulp-eslint'),
-		autoprefixer = require('gulp-autoprefixer');
+const gulp = require('gulp'),
+			browserSync = require('browser-sync').create(),
+			gutil = require('gulp-util'),
+			sass = require('gulp-sass'),
+			uglify = require('gulp-uglify'),
+			concat = require('gulp-concat'),
+			eslint = require('gulp-eslint'),
+			autoprefixer = require('gulp-autoprefixer'),
+			babel = require('gulp-babel');
 
 var sassOptions = {
 	errLogToConsole: true,
@@ -30,7 +31,10 @@ gulp.task('start', ['sass','html'], () => {
 });
 
 gulp.task('js', () => {
-  gulp.src('app/**/*.js')
+	gulp.src('app/**/*.js')
+			.pipe(babel({
+				presets:['env']
+			}))
       .pipe(uglify())
       .pipe(concat('script.js'))
       .pipe(gulp.dest('dist/script'));

@@ -1,1 +1,0 @@
-var thisVariable=100,thisOtherVarible=10,thisIsAnotherVariable=1e3;console.log(thisVariable);
