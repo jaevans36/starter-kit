@@ -6,6 +6,7 @@ Dev environment to use for starting projects
 * Browser-Sync
 * Gulp
 * Sass (via gulp)
+* Babel (via gulp)
 
 ## Installation guide
 1. Copy the repo using `git clone https://github.com/jaevans36/starter-kit.git`

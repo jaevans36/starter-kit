@@ -6,6 +6,7 @@ const gulp = require('gulp'),
 			concat = require('gulp-concat'),
 			eslint = require('gulp-eslint'),
 			autoprefixer = require('gulp-autoprefixer'),
+			minify = require('gulp-minify-css'),
 			babel = require('gulp-babel');
 
 var sassOptions = {
@@ -55,7 +56,8 @@ gulp.task('sass', () => {
 				browsers: ['last 2 versions'],
 				cascade: false
 			}))
-      .pipe(sass(sassOptions).on('error', sass.logError))
+			.pipe(sass(sassOptions).on('error', sass.logError))
+			.pipe(minify())
       .pipe(gulp.dest('dist/css'))
 
   gutil.log(gutil.colors.green('CSS compiled successfuly!'));
