@@ -12,7 +12,6 @@
     "browser-sync": "latest",
     "gulp": "latest",
     "gulp-autoprefixer": "^5.0.0",
-    "gulp-browserify": "^0.5.1",
     "gulp-concat": "latest",
     "gulp-connect": "latest",
     "gulp-eslint": "latest",

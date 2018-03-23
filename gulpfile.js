@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
-    browserSync = require('browser-sync').create();
-    browserify = require('browserify'),
+    browserSync = require('browser-sync').create(),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
@@ -32,10 +31,9 @@ gulp.task('start', ['sass','html'], () => {
 
 gulp.task('js', () => {
   gulp.src('app/**/*.js')
-      .pipe(browserify())
       .pipe(uglify())
       .pipe(concat('script.js'))
-      .pipe(gulp.dest('dist/scripts'));
+      .pipe(gulp.dest('dist/script'));
 
   gutil.log(gutil.colors.green('JS compiled successfuly!'));
 });
