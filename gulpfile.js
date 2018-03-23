@@ -5,7 +5,13 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
-    eslint = require('gulp-eslint');
+    eslint = require('gulp-eslint'),
+		autoprefixer = require('gulp-autoprefixer');
+
+var sassOptions = {
+	errLogToConsole: true,
+	outputStyle: 'expanded'
+}
 
 // Static server and watching scss + html files
 gulp.task('start', ['sass','html'], () => {
@@ -43,8 +49,12 @@ gulp.task('lint', () => {
 
 gulp.task('sass', () => {
   gulp.src('app/styles/*.scss')
-      .pipe(sass().on('error', sass.logError))
-      .pipe(gulp.dest('dist/css/'))
+			.pipe(autoprefixer({
+				browsers: ['last 2 versions'],
+				cascade: false
+			}))
+      .pipe(sass(sassOptions).on('error', sass.logError))
+      .pipe(gulp.dest('dist/css'))
 
   gutil.log(gutil.colors.green('CSS compiled successfuly!'));
 });
