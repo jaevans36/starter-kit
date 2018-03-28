@@ -1,0 +1,1 @@
+import mainJs from '../app/scripts/main';
