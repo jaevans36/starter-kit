@@ -19,7 +19,10 @@ const gulp = require("gulp"),
   imagemin = require("gulp-imagemin"),
   minify = require("gulp-minify-css"),
   babel = require("gulp-babel"),
-  ftp = require("vinyl-ftp");
+  ftp = require("vinyl-ftp"),
+  uncss = require("gulp-uncss"),
+  surge = require("gulp-surge"),
+  config = require("./ftpconfig.json");
 
 // Configs
 
@@ -55,20 +58,20 @@ const routes = {
   deploy: {
     baseDir: base.dist,
     baseDirFiles: `${base.dist}**`,
-    ftpUploadDir: "[FTP-DIRECTORY]"
+    ftpUploadDir: config.ftp.ftpdirectory
   }
 };
 
 // FTP Credentials
 
 const ftpCreds = {
-  host: "[HOST]",
-  user: "[USER]",
-  password: "[PASSWORD]"
+  host: config.ftp.host,
+  user: config.ftp.username,
+  password: config.ftp.password
 };
 
 const surgeInfo = {
-  domain: "[DOMAIN.surge.sh]" // http://surge.sh/help/getting-started-with-surge
+  domain: config.surge.domain // http://surge.sh/help/getting-started-with-surge
 };
 
 // Sass config
@@ -265,13 +268,8 @@ gulp.task("upload", () => {
 gulp.task("surge", () => {
   return surge({
     project: routes.deploy.baseDir,
-    domain: [SURGEINFO.DOMAIN]
-  }).pipe(
-    notify({
-      title: "Surge deployment successful.",
-      message: "Deployment to Surge completed."
-    })
-  );
+    domain: config.surge.domain
+  });
 });
 
 // Pre-production tasks
