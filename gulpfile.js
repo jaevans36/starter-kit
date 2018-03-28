@@ -41,8 +41,8 @@ const routes = {
     jsmin: `${base.dist}assets/js/`
   },
   templates: {
-    pug: `${base.src}templates/*.pug`,
-    _pug: `${base.src}templates/_includes/*.pug`
+    pug: `${base.app}templates/*.pug`,
+    _pug: `${base.app}templates/_includes/*.pug`
   },
   files: {
     html: `${base.dist}`,
@@ -101,6 +101,7 @@ const uncssOptions = {
 	Notify user that Styles task is completed successfully
 */
 gulp.task("templates", () => {
+  console.log(routes.files.html);
   return gulp
     .src([routes.templates.pug, "!" + routes.templates._pug])
     .pipe(
