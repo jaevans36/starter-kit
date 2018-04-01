@@ -1,35 +1,32 @@
 // Imports and requires
-
-const gulp = require("gulp"),
-  browserSync = require("browser-sync").create(),
-  gutil = require("gulp-util"),
-  sass = require("gulp-sass"),
-  pug = require("gulp-pug"),
-  uglify = require("gulp-uglify"),
-  beautify = require("gulp-beautify"),
-  notify = require("gulp-notify"),
-  concat = require("gulp-concat"),
-  plumber = require("gulp-plumber"),
-  cssimport = require("gulp-cssimport"),
-  cssmin = require("gulp-cssnano"),
-  rename = require("gulp-rename"),
-  sourcemaps = require("gulp-sourcemaps"),
-  eslint = require("gulp-eslint"),
-  autoprefixer = require("gulp-autoprefixer"),
-  imagemin = require("gulp-imagemin"),
-  minify = require("gulp-minify-css"),
-  babel = require("gulp-babel"),
-  ftp = require("vinyl-ftp"),
-  uncss = require("gulp-uncss"),
-  surge = require("gulp-surge"),
-  config = require("./ftpconfig.json");
+const gulp = require('gulp'),
+  browserSync = require('browser-sync').create(),
+  sass = require('gulp-sass'),
+  pug = require('gulp-pug'),
+  uglify = require('gulp-uglify'),
+  beautify = require('gulp-beautify'),
+  notify = require('gulp-notify'),
+  concat = require('gulp-concat'),
+  plumber = require('gulp-plumber'),
+  cssimport = require('gulp-cssimport'),
+  cssmin = require('gulp-cssnano'),
+  rename = require('gulp-rename'),
+  sourcemaps = require('gulp-sourcemaps'),
+  autoprefixer = require('gulp-autoprefixer'),
+  imagemin = require('gulp-imagemin'),
+  babel = require('gulp-babel'),
+  eslint = require('gulp-eslint'),
+  ftp = require('vinyl-ftp'),
+  uncss = require('gulp-uncss'),
+  surge = require('gulp-surge'),
+  config = require('./ftpconfig.json');
 
 // Configs
 
 const base = {
-  dist: "dist/",
-  app: "app/",
-  assets: "dist/assets"
+  dist: 'dist/',
+  app: 'app/',
+  assets: 'dist/assets'
 };
 
 const routes = {
@@ -70,21 +67,17 @@ const ftpCreds = {
   password: config.ftp.password
 };
 
-const surgeInfo = {
-  domain: config.surge.domain // http://surge.sh/help/getting-started-with-surge
-};
-
 // Sass config
 
 const sassOptions = {
-  outputStyle: "compressed"
+  outputStyle: 'compressed'
 };
 
 // Uncss config
 
 const uncssOptions = {
   html: [routes.files.htmlFiles],
-  ignore: ["*:*"]
+  ignore: ['*:*']
 };
 
 /* ### Compile tasks ### */
@@ -103,15 +96,14 @@ const uncssOptions = {
 	Browsersync inject changes without page refresh
 	Notify user that Styles task is completed successfully
 */
-gulp.task("templates", () => {
-  console.log(routes.files.html);
+gulp.task('templates', () => {
   return gulp
-    .src([routes.templates.pug, "!" + routes.templates._pug])
+    .src([routes.templates.pug, '!' + routes.templates._pug])
     .pipe(
       plumber({
         errorHandler: notify.onError({
-          title: "Error: Compiling Pug failed.",
-          message: "<%= error.message %>"
+          title: 'Error: Compiling Pug failed.',
+          message: '<%= error.message %>'
         })
       })
     )
@@ -124,8 +116,8 @@ gulp.task("templates", () => {
     )
     .pipe(
       notify({
-        title: "Pug Compiled successfully.",
-        message: "templates task completed."
+        title: 'Pug Compiled successfully.',
+        message: 'templates task completed.'
       })
     );
 });
@@ -144,29 +136,29 @@ gulp.task("templates", () => {
 	Browsersync inject changes without page refresh
 	Notify user that Styles task is completed successfully
 */
-gulp.task("styles", () => {
+gulp.task('styles', () => {
   return gulp
     .src(routes.styles.scss)
     .pipe(
       plumber({
         errorHandler: notify.onError({
-          title: "Error: Compiling SCSS failed.",
-          message: "<%= error.message %>"
+          title: 'Error: Compiling SCSS failed.',
+          message: '<%= error.message %>'
         })
       })
     )
     .pipe(sourcemaps.init())
     .pipe(sass(sassOptions))
-    .pipe(autoprefixer("last 3 versions"))
+    .pipe(autoprefixer('last 3 versions'))
     .pipe(sourcemaps.write())
     .pipe(cssimport({}))
-    .pipe(rename("style.css"))
+    .pipe(rename('style.css'))
     .pipe(gulp.dest(routes.styles.css))
     .pipe(browserSync.stream())
     .pipe(
       notify({
-        title: "SCSS Compiled and Minified successfully.",
-        message: "scss task completed."
+        title: 'SCSS Compiled and Minified successfully.',
+        message: 'scss task completed.'
       })
     );
 });
@@ -185,19 +177,19 @@ gulp.task("styles", () => {
 	Browsersync refresh the page
 	Notify user that Scripts task is completed successfully
 */
-gulp.task("scripts", () => {
+gulp.task('scripts', () => {
   return gulp
     .src(routes.scripts.js)
     .pipe(
       plumber({
         errorHandler: notify.onError({
-          title: "Error: Babel and Concat failed.",
-          message: "<%= error.message %>"
+          title: 'Error: Babel and Concat failed.',
+          message: '<%= error.message %>'
         })
       })
     )
     .pipe(sourcemaps.init())
-    .pipe(concat("script.js"))
+    .pipe(concat('script.js'))
     .pipe(babel())
     .pipe(uglify())
     .pipe(sourcemaps.write())
@@ -205,10 +197,26 @@ gulp.task("scripts", () => {
     .pipe(browserSync.reload({ stream: true }))
     .pipe(
       notify({
-        title: "JavaScript minified and concatenated.",
-        message: "js files have been minified and concatenated."
+        title: 'JavaScript minified and concatenated.',
+        message: 'js files have been minified and concatenated.'
       })
     );
+});
+
+// JS linting
+/*
+  Tasks:
+  Check all JS files but ignore the node_modules and dist folders
+  Start ESlint
+  Output any ESlint error to console
+  Exit the stream if there's an error code of (1)
+*/
+gulp.task('lint', () => {
+  return gulp
+    .src(['**/*.js', '!node_modules/**', '!dist/**'])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
 
 // Images
@@ -217,7 +225,7 @@ gulp.task("scripts", () => {
 	Minify the images
 	Copy the minified images to distribution folder
 */
-gulp.task("images", () => {
+gulp.task('images', () => {
   gulp
     .src(routes.files.images)
     .pipe(imagemin())
@@ -232,7 +240,7 @@ gulp.task("images", () => {
 	Upload all files to prod
 	Notify user that Deploy task is completed successfully
 */
-gulp.task("upload", () => {
+gulp.task('upload', () => {
   const connection = ftp.create({
     host: ftpCreds.host,
     user: ftpCreds.user,
@@ -247,16 +255,16 @@ gulp.task("upload", () => {
     .pipe(
       plumber({
         errorHandler: notify.onError({
-          title: "Error: Deployment failed.",
-          message: "<%= error.message %>"
+          title: 'Error: Deployment failed.',
+          message: '<%= error.message %>'
         })
       })
     )
     .pipe(connection.dest(routes.deploy.ftpUploadDir))
     .pipe(
       notify({
-        title: "Deployment successful.",
-        message: "Deployment completed."
+        title: 'Deployment successful.',
+        message: 'Deployment completed.'
       })
     );
 });
@@ -265,7 +273,7 @@ gulp.task("upload", () => {
 	Tasks:
 	Publish site to surge
 */
-gulp.task("surge", () => {
+gulp.task('surge', () => {
   return surge({
     project: routes.deploy.baseDir,
     domain: config.surge.domain
@@ -280,48 +288,48 @@ gulp.task("surge", () => {
 	Copy the beautified files
 	Notify user that beautification is completed successfully
 */
-gulp.task("beautify", () => {
+gulp.task('beautify', () => {
   return gulp
     .src(routes.scripts.js)
     .pipe(beautify({ indentSize: 2 }))
     .pipe(
       plumber({
         errorHandler: notify.onError({
-          title: "Error: Beautify failed.",
-          message: "<%= error.message %>"
+          title: 'Error: Beautify failed.',
+          message: '<%= error.message %>'
         })
       })
     )
     .pipe(gulp.dest(routes.scripts.base))
     .pipe(
       notify({
-        title: "Beautification successful.",
-        message: "Beautification of scripts successful."
+        title: 'Beautification successful.',
+        message: 'Beautification of scripts successful.'
       })
     );
 });
 
 // Create local server and watch for changes
-gulp.task("watch", () => {
+gulp.task('watch', () => {
   browserSync.init({
-    server: "./dist/"
+    server: './dist/'
   });
 
-  gulp.watch([routes.styles.scss, routes.styles._scss], ["styles"]);
-  gulp.watch([routes.templates.pug, routes.templates._pug], ["templates"]);
-  gulp.watch(routes.scripts.js, ["scripts", "beautify"]);
+  gulp.watch([routes.styles.scss, routes.styles._scss], ['styles']);
+  gulp.watch([routes.templates.pug, routes.templates._pug], ['templates']);
+  gulp.watch(routes.scripts.js, ['scripts', 'beautify', 'lint']);
 });
 
 // Remove un-used CSS
-gulp.task("uncss", () => {
+gulp.task('uncss', () => {
   return gulp
     .src(routes.files.cssFiles)
     .pipe(uncss({ uncssOptions }))
     .pipe(
       plumber({
         errorHandler: notify.onError({
-          title: "Error: UnCSS failed.",
-          message: "<%= error.message %>"
+          title: 'Error: UnCSS failed.',
+          message: '<%= error.message %>'
         })
       })
     )
@@ -329,17 +337,17 @@ gulp.task("uncss", () => {
     .pipe(gulp.dest(routes.styles.css))
     .pipe(
       notify({
-        title: "UnCSS successful.",
-        message: "Unused CSS removed successful."
+        title: 'UnCSS successful.',
+        message: 'Unused CSS removed successful.'
       })
     );
 });
 
 // Task commands
-gulp.task("dev", ["templates", "styles", "scripts", "images", "watch"]);
-gulp.task("build", ["templates", "styles", "scripts", "images"]);
-gulp.task("optimise", ["uncss", "images"]);
-gulp.task("deploy", ["optimise", "surge"]);
-gulp.task("default", () => {
-  gulp.start("dev");
+gulp.task('dev', ['templates', 'styles', 'scripts', 'images', 'watch']);
+gulp.task('build', ['templates', 'styles', 'scripts', 'images']);
+gulp.task('optimise', ['uncss', 'images']);
+gulp.task('deploy', ['optimise', 'surge']);
+gulp.task('default', () => {
+  gulp.start('dev');
 });
