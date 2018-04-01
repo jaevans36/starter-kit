@@ -215,8 +215,15 @@ gulp.task('lint', () => {
   return gulp
     .src(['**/*.js', '!node_modules/**', '!dist/**'])
     .pipe(eslint())
+    .pipe(plumber())
     .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
+    .pipe(eslint.failAfterError())
+    .pipe(
+      notify({
+        title: 'ESLint completed.',
+        message: 'All dev files have been linted.'
+      })
+    );
 });
 
 // Images
