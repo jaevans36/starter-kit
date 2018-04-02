@@ -1,0 +1,42 @@
+.logo {
+  position: absolute;
+  line-height: 40px;
+  margin: 0 14px;
+
+  img {
+      height: 44px;
+      width: auto;
+  }
+}
+
+nav {
+  width: 100%;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #2C3E50;
+  }
+
+  li {
+      float: right;
+  }
+
+  li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+  }
+
+  li a:hover:not(.active) {
+      background-color: #111;
+  }
+
+  .active {
+      background-color: #4CAF50;
+  }
+}

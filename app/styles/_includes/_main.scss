@@ -1,5 +1,11 @@
 body {
   margin: 0 auto;
+  width: 80vw;
   font-size: 14px;
+  color: #fff;
   font-family: Helvetica, Arial, sans-serif;
+  background: #2C3E50;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #FD746C, #2C3E50);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #FD746C, #2C3E50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 100vh;
 }
