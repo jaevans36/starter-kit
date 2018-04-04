@@ -17,7 +17,7 @@ nav {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #2C3E50;
+    background-color: rgba(255, 255, 255, 0.301)
   }
 
   li {
@@ -28,12 +28,12 @@ nav {
       display: block;
       color: white;
       text-align: center;
-      padding: 14px 16px;
+      padding: 14px 20px;
       text-decoration: none;
   }
 
   li a:hover:not(.active) {
-      background-color: #111;
+      background-color: rgba(0, 0, 0, 0.295);
   }
 
   .active {
