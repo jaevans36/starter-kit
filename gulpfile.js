@@ -14,6 +14,7 @@ const gulp = require('gulp'),
   sourcemaps = require('gulp-sourcemaps'),
   autoprefixer = require('gulp-autoprefixer'),
   imagemin = require('gulp-imagemin'),
+  pngquant = require('imagemin-pngquant'),
   babel = require('gulp-babel'),
   eslint = require('gulp-eslint'),
   ftp = require('vinyl-ftp'),
@@ -235,7 +236,10 @@ gulp.task('lint', () => {
 gulp.task('images', () => {
   gulp
     .src(routes.files.images)
-    .pipe(imagemin())
+    .pipe(imagemin({
+      progressive: true,
+      use: [pngquant()]
+    }))
     .pipe(gulp.dest(routes.files.imgmin));
 });
 
