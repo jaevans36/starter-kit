@@ -12,7 +12,6 @@ const gulp = require('gulp'),
   cssmin = require('gulp-cssnano'),
   rename = require('gulp-rename'),
   sourcemaps = require('gulp-sourcemaps'),
-  autoprefixer = require('gulp-autoprefixer'),
   imagemin = require('gulp-imagemin'),
   pngquant = require('imagemin-pngquant'),
   babel = require('gulp-babel'),
@@ -20,7 +19,10 @@ const gulp = require('gulp'),
   ftp = require('vinyl-ftp'),
   uncss = require('gulp-uncss'),
   surge = require('gulp-surge'),
-  config = require('./ftpconfig.json');
+  config = require('./ftpconfig.json'),
+  postcss = require('gulp-postcss'),
+  autoprefixer = require('autoprefixer'),
+  cssnano = require('cssnano');
 
 // Configs
 
@@ -129,7 +131,7 @@ gulp.task('templates', () => {
 	Unpipe stream on error
 	Start sourcemap process
 	Sass compiler
-	Autoprefixer
+	Autoprefixer & cssnano
 	Complete sourcemap process
 	Replace improt statements with css
 	Rename file to 'style.css'
@@ -138,6 +140,10 @@ gulp.task('templates', () => {
 	Notify user that Styles task is completed successfully
 */
 gulp.task('styles', () => {
+  var processors = [
+    autoprefixer,
+    cssnano
+  ];
   return gulp
     .src(routes.styles.scss)
     .pipe(
@@ -149,8 +155,8 @@ gulp.task('styles', () => {
       })
     )
     .pipe(sourcemaps.init())
+    .pipe(postcss(processors))
     .pipe(sass(sassOptions))
-    .pipe(autoprefixer('last 3 versions'))
     .pipe(sourcemaps.write())
     .pipe(cssimport({}))
     .pipe(rename('style.css'))

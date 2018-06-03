@@ -31,7 +31,7 @@ Dev environment to use for starting static website projects
 1. Copy the project using `git clone https://github.com/jaevans36/starter-kit.git`
 2. If you don't have NodeJs - install [**NodeJs from here**](https://nodejs.org/en/) 
 3. When node is installed, if you don't have gulp, install it using `npm install -g gulp`.
-4. Create a new .json file with the following details, in your main directory:
+4. Create a new ftpconfig.json file with the following details, in your main directory:
     ```
     {
       "ftp": {
